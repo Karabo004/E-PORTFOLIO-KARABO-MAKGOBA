@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Karabo Makgoba — Mechatronics Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0b0d;--bg-soft:#101216;--panel:#12151a;--ink:#f4f5f7;--ink-dim:#8b9098;
+    --line:#22262d;--accent:#ff6a2b;--accent-cool:#37e0c8;--radius:6px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',system-ui,sans-serif;
+    overflow-x:hidden;-webkit-font-smoothing:antialiased;min-height:100vh}
+  body::before{content:"";position:fixed;inset:0;
+    background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:44px 44px;opacity:.13;pointer-events:none;z-index:0}
+  header{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;
+    padding:20px 34px;z-index:60;background:linear-gradient(var(--bg),transparent)}
+  .brand{font-weight:700;font-size:19px;letter-spacing:.5px;cursor:pointer}
+  .brand span{color:var(--accent)}
+  nav{display:flex;gap:24px}
+  nav a{color:var(--ink);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:12.5px;
+    letter-spacing:.5px;text-transform:uppercase;opacity:.8;transition:opacity .2s,color .2s;position:relative;cursor:pointer}
+  nav a::after{content:"";position:absolute;left:0;bottom:-4px;width:0;height:1px;background:var(--accent);transition:width .25s ease}
+  nav a:hover,nav a.active{opacity:1;color:var(--ink)}
+  nav a:hover::after,nav a.active::after{width:100%}
+  .menu-btn{display:none;background:none;border:1px solid var(--line);color:var(--ink);
+    font-family:'JetBrains Mono',monospace;font-size:12px;padding:8px 12px;border-radius:5px;cursor:pointer}
+  main{position:relative;z-index:1}
+  .view{display:none;min-height:100vh;padding:120px 34px 80px;max-width:1200px;margin:0 auto;animation:fade .5s ease}
+  .view.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .sec-label{font-family:'JetBrains Mono',monospace;color:var(--accent-cool);font-size:12px;
+    letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+  .sec-title{font-size:clamp(34px,6vw,64px);font-weight:700;letter-spacing:-1.5px;line-height:1;margin-bottom:30px}
+  .sec-title em{color:var(--accent);font-style:normal}
+  #home{padding:0;max-width:none;margin:0}
+  .hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+    padding:0 34px;max-width:1400px;margin:0 auto}
+  .eyebrow{font-family:'JetBrains Mono',monospace;color:var(--accent-cool);font-size:13px;
+    letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;opacity:0;transform:translateY(14px)}
+  .hero h1{font-size:clamp(46px,7vw,104px);font-weight:700;line-height:.92;letter-spacing:-2px;max-width:11ch}
+  .hero .eyebrow,.hero h1,.hero .sub,.hero .tagline{max-width:min(640px,58%)}
+  .hero h1 .line{display:block;overflow:hidden}
+  .hero h1 .line span{display:block;transform:translateY(110%)}
+  .hero h1 em{color:var(--accent);font-style:normal}
+  .hero .sub{margin-top:26px;max-width:44ch;color:var(--ink-dim);font-size:clamp(15px,1.6vw,18px);
+    line-height:1.6;opacity:0;transform:translateY(14px)}
+  .hero .tagline{margin-top:32px;display:flex;gap:10px;flex-wrap:wrap;opacity:0;transform:translateY(14px)}
+  .chip{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.5px;
+    border:1px solid var(--line);padding:7px 12px;border-radius:100px;color:var(--ink-dim)}
+  .deck{position:absolute;top:50%;right:10vw;transform:translateY(-50%);width:clamp(200px,26vw,320px);
+    aspect-ratio:3/4;z-index:1;cursor:pointer;user-select:none;outline:none}
+  .deck:focus-visible{outline:2px solid var(--accent-cool);outline-offset:14px;border-radius:10px}
+  .card{position:absolute;top:0;left:0;width:100%;height:100%;aspect-ratio:3/4;
+    border-radius:var(--radius);overflow:hidden;background:var(--bg-soft);border:1px solid rgba(255,255,255,.08);
+    box-shadow:0 30px 60px -20px rgba(0,0,0,.8);transform:translate(0,0) rotate(0deg) scale(.7);
+    opacity:0;will-change:transform,opacity}
+  .deck-hint{position:absolute;left:50%;bottom:-38px;transform:translateX(-50%);white-space:nowrap;
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:1px;color:var(--accent-cool);
+    opacity:0;transition:opacity .5s ease;pointer-events:none}
+  .card img{width:100%;height:100%;object-fit:cover;display:block}
+  .card .cap{position:absolute;left:8px;bottom:8px;font-family:'JetBrains Mono',monospace;font-size:10px;
+    letter-spacing:.5px;color:#fff;background:rgba(0,0,0,.55);padding:3px 7px;border-radius:3px;backdrop-filter:blur(4px)}
+  .scroll-hint{position:absolute;bottom:26px;left:34px;font-family:'JetBrains Mono',monospace;font-size:11px;
+    letter-spacing:1px;color:var(--ink-dim);display:flex;align-items:center;gap:8px;opacity:0}
+  .scroll-hint .dot{width:5px;height:5px;border-radius:50%;background:var(--accent-cool);animation:pulse 1.6s infinite}
+  @keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+  .about-grid img{width:100%;border-radius:var(--radius);border:1px solid var(--line)}
+  .about-grid p{color:var(--ink-dim);font-size:17px;line-height:1.75;margin-bottom:18px}
+  .about-grid p strong{color:var(--ink);font-weight:600}
+  .facts{margin-top:26px;display:flex;flex-direction:column;gap:12px}
+  .fact{display:flex;gap:14px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ink-dim)}
+  .fact b{color:var(--accent-cool);min-width:90px}
+  .skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+  .skill-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+  .skill-card h3{font-size:14px;font-family:'JetBrains Mono',monospace;color:var(--accent);
+    text-transform:uppercase;letter-spacing:1px;margin-bottom:16px}
+  .skill-card ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+  .skill-card li{color:var(--ink-dim);font-size:15px;display:flex;justify-content:space-between;align-items:center}
+  .bar{width:90px;height:4px;background:var(--line);border-radius:4px;overflow:hidden}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-cool))}
+  .proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px}
+  .proj{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
+    transition:transform .3s,border-color .3s}
+  .proj:hover{transform:translateY(-6px);border-color:var(--accent)}
+  .proj .thumb{aspect-ratio:16/10;overflow:hidden}
+  .proj .thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+  .proj:hover .thumb img{transform:scale(1.06)}
+  .proj .body{padding:20px}
+  .proj .tag{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent-cool);
+    text-transform:uppercase;letter-spacing:1px}
+  .proj h3{font-size:19px;margin:8px 0 8px}
+  .proj p{color:var(--ink-dim);font-size:14px;line-height:1.6}
+  .serv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px}
+  .serv{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:30px;
+    position:relative;overflow:hidden}
+  .serv .num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent);letter-spacing:1px}
+  .serv h3{font-size:22px;margin:14px 0 12px}
+  .serv p{color:var(--ink-dim);font-size:15px;line-height:1.65}
+  .serv .price{margin-top:16px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent-cool)}
+  .edu-wrap{display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:start}
+  .timeline{border-left:2px solid var(--line);padding-left:26px;display:flex;flex-direction:column;gap:30px}
+  .tl{position:relative}
+  .tl::before{content:"";position:absolute;left:-33px;top:4px;width:12px;height:12px;border-radius:50%;
+    background:var(--accent);box-shadow:0 0 0 4px var(--bg)}
+  .tl .yr{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent-cool);letter-spacing:1px}
+  .tl h3{font-size:19px;margin:6px 0 6px}
+  .tl p{color:var(--ink-dim);font-size:14px;line-height:1.6}
+  .cert img{width:100%;border-radius:var(--radius);border:1px solid var(--line)}
+  .cert .cap{margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-dim)}
+  .contact-wrap{max-width:620px}
+  .contact-wrap p{color:var(--ink-dim);font-size:17px;line-height:1.7;margin-bottom:30px}
+  .links{display:flex;flex-direction:column;gap:14px}
+  .clink{display:flex;align-items:center;justify-content:space-between;background:var(--panel);
+    border:1px solid var(--line);border-radius:var(--radius);padding:18px 22px;text-decoration:none;
+    color:var(--ink);transition:border-color .25s,transform .25s}
+  .clink:hover{border-color:var(--accent);transform:translateX(6px)}
+  .clink .l{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent-cool);
+    text-transform:uppercase;letter-spacing:1px}
+  .clink .v{font-size:16px}
+  .clink .arrow{color:var(--accent);font-size:18px}
+  @media (prefers-reduced-motion:reduce){
+    .card{opacity:1 !important}
+    .hero h1 .line span,.eyebrow,.hero .sub,.hero .tagline,.scroll-hint{opacity:1 !important;transform:none !important}}
+  @media (max-width:900px){
+    nav{position:fixed;top:64px;right:34px;flex-direction:column;gap:0;background:var(--panel);
+      border:1px solid var(--line);border-radius:8px;padding:8px;display:none;box-shadow:0 20px 40px -12px rgba(0,0,0,.7)}
+    nav.open{display:flex}
+    nav a{padding:12px 18px}
+    .menu-btn{display:block}
+    .deck{position:relative;top:auto;right:auto;transform:none;width:min(240px,70vw);margin:44px auto 60px;aspect-ratio:3/4;height:auto}
+    .hero{padding-top:120px;min-height:auto;padding-bottom:70px}
+    .hero .eyebrow,.hero h1,.hero .sub,.hero .tagline{max-width:100%}
+    .about-grid,.edu-wrap{grid-template-columns:1fr;gap:28px}
+    .scroll-hint{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand" data-nav="home">KARABO<span>.</span></div>
+  <button class="menu-btn" id="menuBtn">MENU</button>
+  <nav id="nav">
+    <a data-nav="about">About&nbsp;Me</a>
+    <a data-nav="skills">Skills</a>
+    <a data-nav="projects">Projects</a>
+    <a data-nav="services">Services</a>
+    <a data-nav="education">Education</a>
+    <a data-nav="contact">Contact</a>
+  </nav>
+</header>
+<main>
+  <section class="view active" id="home">
+    <div class="hero">
+      <p class="eyebrow" id="eyebrow">// Mechatronics Engineer · Cape Town</p>
+      <h1>
+        <span class="line"><span>I build the</span></span>
+        <span class="line"><span>bridge between</span></span>
+        <span class="line"><span><em>code</em> &amp; <em>circuits</em>.</span></span>
+      </h1>
+      <p class="sub" id="sub">Final-year Mechatronics at UCT. From battery systems and micromice to
+        autonomous buoys and web platforms — I turn ideas into things that move.</p>
+      <div class="tagline" id="tagline">
+        <span class="chip">Embedded C</span><span class="chip">Python</span><span class="chip">MATLAB</span>
+        <span class="chip">PCB Design</span><span class="chip">Control Systems</span>
+      </div>
+      <div class="deck" id="deck" role="button" tabindex="0" aria-label="Click to shuffle photos">
+        <div class="card"><img src="images/me.jpg" alt="Karabo"><span class="cap">// karabo</span></div>
+        <div class="card"><img src="images/tuktuk.jpg" alt="E-tuk-tuk"><span class="cap">// electric drive</span></div>
+        <div class="card"><img src="images/bench.jpg" alt="Lab bench"><span class="cap">// bms bench</span></div>
+        <div class="card"><img src="images/cad-jig.jpg" alt="CAD"><span class="cap">// cad / cmm jig</span></div>
+        <div class="card"><img src="images/robot.jpg" alt="Robot"><span class="cap">// controls</span></div>
+        <div class="deck-hint" id="deckHint">click to shuffle →</div>
+      </div>
+      <div class="scroll-hint" id="hint"><span class="dot"></span> use the menu to explore</div>
+    </div>
+  </section>
+  <section class="view" id="about">
+    <p class="sec-label">// 01 — About Me</p>
+    <h2 class="sec-title">Engineer, <em>builder</em>,<br>problem-solver.</h2>
+    <div class="about-grid">
+      <img src="images/me.jpg" alt="Karabo Makgoba">
+      <div>
+        <p>I'm <strong>Karabo Makgoba</strong>, a <strong>Mechatronics Engineer</strong> from the
+        University of Cape Town. I live in the overlap between hardware and software — the place where a
+        line of code makes a motor spin or a circuit come alive.</p>
+        <p>I schooled at the University of Cape Town, where I spent five years completing my Mechatronics
+        degree. I got vacation work experience at <strong>Balancell</strong>, a company building
+        intelligent energy-storage and battery-management systems, where I learned how these systems work
+        and assisted in building <strong>test rigs for PCBs</strong>. I've also worked with
+        <strong>UCT</strong> to create a <strong>digital twin</strong> for an electric vehicle's electric
+        drive.</p>
+        <p>Other projects I've done include building a maze-solving <strong>micromouse</strong> and
+        designing its power-management system. I've also designed the <strong>power architecture</strong>
+        for an autonomous buoy meant to spend months in the ocean collecting data to help address the
+        global-warming crisis.</p>
+        <p>My own projects include building web platforms that give high-schoolers access to over
+        <strong>1000 past papers</strong> and my own custom resources — because as much as I love
+        engineering, I'm passionate about <strong>giving kids hope to do well in school</strong>.</p>
+        <div class="facts">
+          <div class="fact"><b>Based in</b> Cape Town, South Africa</div>
+          <div class="fact"><b>Studied</b> Mechatronics Eng · UCT</div>
+          <div class="fact"><b>Experience</b> Balancell · UCT Digital Twin</div>
+          <div class="fact"><b>Focus</b> Power · PCBs · Embedded</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="view" id="skills">
+    <p class="sec-label">// 02 — Skills</p>
+    <h2 class="sec-title">What I <em>work</em> with.</h2>
+    <div class="skills-grid">
+      <div class="skill-card"><h3>Programming</h3><ul>
+        <li>Python <span class="bar"><i style="width:90%"></i></span></li>
+        <li>C / Embedded <span class="bar"><i style="width:82%"></i></span></li>
+        <li>MATLAB <span class="bar"><i style="width:85%"></i></span></li>
+        <li>Java <span class="bar"><i style="width:70%"></i></span></li></ul></div>
+      <div class="skill-card"><h3>Hardware</h3><ul>
+        <li>PCB Design <span class="bar"><i style="width:80%"></i></span></li>
+        <li>Circuit Analysis <span class="bar"><i style="width:85%"></i></span></li>
+        <li>Power Architecture Design <span class="bar"><i style="width:80%"></i></span></li></ul></div>
+      <div class="skill-card"><h3>Software &amp; Web</h3><ul>
+        <li>HTML / CSS / JS <span class="bar"><i style="width:78%"></i></span></li>
+        <li>SolidWorks / CAD <span class="bar"><i style="width:75%"></i></span></li>
+        <li>Git <span class="bar"><i style="width:70%"></i></span></li>
+        <li>Static Sites <span class="bar"><i style="width:80%"></i></span></li></ul></div>
+    </div>
+  </section>
+  <section class="view" id="projects">
+    <p class="sec-label">// 03 — Projects</p>
+    <h2 class="sec-title">Things I've <em>built</em>.</h2>
+    <div class="proj-grid">
+      <article class="proj"><div class="thumb"><img src="images/tuktuk.jpg" alt="Electric tuk-tuk"></div>
+        <div class="body"><span class="tag">Electric Drive</span><h3>Electric Vehicle Drivetrain Modelling</h3>
+        <p>Created a digital twin for the electric drivetrain of an electric vehicle — got hands-on experience with an EV and learned how battery-to-system architecture works.</p></div></article>
+      <article class="proj"><div class="thumb"><img src="images/mrengineer.jpg" alt="Mr Engineer SA"></div>
+        <div class="body"><span class="tag">Web · EdTech</span><h3>Mr Engineer SA</h3>
+        <p>A website I built and run where Grade 10–12 students access past papers, memos and video walkthroughs for Maths &amp; Physical Sciences.</p></div></article>
+      <article class="proj"><div class="thumb"><img src="images/cad-jig.jpg" alt="CMM test jig"></div>
+        <div class="body"><span class="tag">Mechanical · CAD</span><h3>CMM Test Jig</h3>
+        <p>Assisted in making a test-jig in SolidWorks, and designed the company's Human-Machine Interface so workers can easily use the machine and engineers can easily service it.</p></div></article>
+      <article class="proj"><div class="thumb"><img src="images/robot.jpg" alt="Maze-solving micromouse"></div>
+        <div class="body"><span class="tag">Controls · Power</span><h3>Maze-Solving Micromouse</h3>
+        <p>Built an autonomous maze-solving micromouse and designed its power-management system — balancing motor drive, sensing and control on a compact PCB platform.</p></div></article>
+      <article class="proj"><div class="thumb"><img src="images/bench.jpg" alt="Autonomous buoy power architecture"></div>
+        <div class="body"><span class="tag">Electronics · Power</span><h3>Autonomous Buoy — Power Architecture</h3>
+        <p>Designed an efficient power architecture for an autonomous buoy meant to float in the ocean for up to 3 months, collecting data to support marine research and the study of global warming.</p></div></article>
+      <article class="proj"><div class="thumb"><img src="images/atwork.jpg" alt="Autonomous buoy final build"></div>
+        <div class="body"><span class="tag">Electronics · Marine</span><h3>Autonomous Buoy — Final Build</h3>
+        <p>The assembled buoy, powered by that architecture and ready for long-duration ocean deployment — from power design through to a working, field-ready unit.</p></div></article>
+    </div>
+  </section>
+  <section class="view" id="services">
+    <p class="sec-label">// 04 — Services</p>
+    <h2 class="sec-title">How I can <em>help</em>.</h2>
+    <div class="serv-grid">
+      <div class="serv"><span class="num">S/01</span><h3>Grade 12 Tutoring</h3>
+        <p>One-on-one and small-group tutoring in Maths and Physical Sciences for Grade 12 and matric-upgrade students. Clear, patient, exam-focused teaching from someone who's been through it.</p>
+        <div class="price">Enquire for packages →</div></div>
+      <div class="serv"><span class="num">S/02</span><h3>Static Websites for Businesses</h3>
+        <p>Clean, fast, custom-built websites for companies and small businesses. No bloated templates — just a professional site that loads quickly and represents your brand well.</p>
+        <div class="price">Custom quote →</div></div>
+    </div>
+  </section>
+  <section class="view" id="education">
+    <p class="sec-label">// 05 — Education</p>
+    <h2 class="sec-title">Where I've <em>learned</em>.</h2>
+    <div class="edu-wrap">
+      <div class="timeline">
+        <div class="tl"><div class="yr">CURRENT</div><h3>BSc Mechatronics Engineering</h3>
+          <p>University of Cape Town — final year. Control systems, embedded systems, electronics, mechanical design and software.</p></div>
+        <div class="tl"><div class="yr">2026</div><h3>Vacation Work Experience</h3>
+          <p><strong>UCT:</strong> Assisted in the design of a drivetrain digital twin.<br>
+          <strong>Balancell:</strong> Assisted in the design of test rigs for PCBs.</p></div>
+        <div class="tl"><div class="yr">2025</div><h3>Recognition &amp; Leadership</h3>
+          <p>Dean's List, UCT · Participated in Study Trust business seminars · Head Mentor at UCT.</p></div>
+        <div class="tl"><div class="yr">2024</div><h3>Recognition &amp; Leadership</h3>
+          <p>Dean's List, UCT · Participated in Study Trust business seminar · Mentor at UCT.</p></div>
+      </div>
+      <div class="cert"><img src="images/cert.jpg" alt="Academic Achievement Award 2025">
+        <div class="cap">// Leo Marquard Hall — Academic Achievement, 2025</div></div>
+    </div>
+  </section>
+  <section class="view" id="contact">
+    <p class="sec-label">// 06 — Contact</p>
+    <h2 class="sec-title">Let's <em>talk</em>.</h2>
+    <div class="contact-wrap">
+      <p>Whether you need a tutor, a website, or just want to talk engineering — I'd love to hear from you. Reach me here:</p>
+      <div class="links">
+        <a class="clink" href="https://www.linkedin.com/in/karabo-makgoba-27283a30a" target="_blank" rel="noopener">
+          <span><span class="l">LinkedIn</span><br><span class="v">Karabo Makgoba</span></span><span class="arrow">↗</span></a>
+        <a class="clink" href="mailto:makgoba004@gmail.com">
+          <span><span class="l">Email</span><br><span class="v">makgoba004@gmail.com</span></span><span class="arrow">↗</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+const views=document.querySelectorAll('.view');
+const nav=document.getElementById('nav');
+function show(id){
+  views.forEach(v=>v.classList.toggle('active',v.id===id));
+  document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('active',a.dataset.nav===id));
+  nav.classList.remove('open');
+  window.scrollTo({top:0,behavior:'instant'});
+  if(id==='home')runHero();
+}
+document.querySelectorAll('[data-nav]').forEach(a=>a.addEventListener('click',()=>show(a.dataset.nav)));
+document.getElementById('menuBtn').addEventListener('click',()=>nav.classList.toggle('open'));
+const reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+const deck=document.getElementById('deck');
+const cards=Array.from(document.querySelectorAll('#deck .card'));
+// order[] = current stacking, front-of-stack first. Starts with card 0 (you) on top.
+let order=cards.map((_,i)=>i);
+let busy=false, dealt=false;
+
+// slight fanned-stack offset so you can see there's a pile: top card flat, ones behind peek out
+const stackPos=n=>({x:n*10, y:n*8, r:n*2.2, s:1-n*0.04}); // n = depth from front (0=front)
+
+function place(card,depth,animate){
+  const p=stackPos(depth);
+  card.style.transition=animate?'transform .5s cubic-bezier(.16,1,.3,1),opacity .4s ease':'none';
+  card.style.opacity='1';
+  card.style.zIndex=cards.length-depth;
+  card.style.transform=`translate(${p.x}px,${p.y}px) rotate(${p.r}deg) scale(${p.s})`;
+}
+
+function renderStack(animate){
+  order.forEach((cardIdx,depth)=>place(cards[cardIdx],depth,animate));
+}
+
+function shuffle(){
+  if(busy||!dealt)return;
+  busy=true;
+  const frontIdx=order[0];
+  const front=cards[frontIdx];
+  const back=stackPos(cards.length-1);
+  // 1) throw front card up-and-out to the side
+  front.style.transition='transform .34s ease-in, opacity .34s ease';
+  front.style.transform='translate(120px,-40px) rotate(14deg) scale(1.04)';
+  front.style.zIndex=99;
+  setTimeout(()=>{
+    // 2) drop it to the back position (invisible move behind the pile)
+    front.style.transition='none';
+    front.style.transform=`translate(${back.x}px,${back.y}px) rotate(${back.r}deg) scale(${back.s})`;
+    front.style.zIndex=0;
+    // 3) rotate the order array so it's now last, and re-render everyone sliding forward
+    order=[...order.slice(1),frontIdx];
+    void deck.offsetWidth;
+    renderStack(true);
+    setTimeout(()=>busy=false,420);
+  },320);
+}
+deck.addEventListener('click',shuffle);
+deck.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();shuffle();}});
+
+function runHero(){
+  if(reduce){
+    order=cards.map((_,i)=>i);
+    renderStack(false);dealt=true;
+    document.getElementById('deckHint').style.opacity='1';
+    document.querySelectorAll('#eyebrow,#sub,#tagline,#hint').forEach(e=>e.style.opacity='1');
+    document.querySelectorAll('.hero h1 .line span').forEach(e=>e.style.transform='none');
+    return;
+  }
+  dealt=false;order=cards.map((_,i)=>i);
+  // reset cards stacked & hidden in centre
+  cards.forEach(c=>{c.style.transition='none';c.style.opacity='0';c.style.transform='translate(0,0) rotate(0deg) scale(.7)';});
+  document.getElementById('deckHint').style.opacity='0';
+  document.querySelectorAll('.hero h1 .line span').forEach(e=>{e.style.transition='none';e.style.transform='translateY(110%)';});
+  ['#eyebrow','#sub','#tagline','#hint'].forEach(s=>{const e=document.querySelector(s);e.style.transition='none';e.style.opacity='0';e.style.transform='translateY(14px)';});
+  void document.body.offsetWidth;
+  // text reveal
+  document.querySelectorAll('.hero h1 .line span').forEach((el,i)=>setTimeout(()=>{el.style.transition='transform .8s cubic-bezier(.16,1,.3,1)';el.style.transform='translateY(0)';},150+i*120));
+  const fade=(s,d)=>{const e=document.querySelector(s);setTimeout(()=>{e.style.transition='opacity .7s ease,transform .7s ease';e.style.opacity='1';e.style.transform='translateY(0)';},d);};
+  fade('#eyebrow',80);fade('#sub',650);fade('#tagline',820);fade('#hint',1100);
+  // deal cards onto the pile one at a time (deepest first so top lands last)
+  order.slice().reverse().forEach((cardIdx,k)=>{
+    const depth=cards.length-1-k;
+    setTimeout(()=>place(cards[cardIdx],depth,true),350+k*140);
+  });
+  setTimeout(()=>{
+    dealt=true;
+    const h=document.getElementById('deckHint');h.style.opacity='1';
+    // gentle nudge so people notice it's clickable (uses current computed transform as base)
+    setTimeout(()=>{if(!busy){const base=getComputedStyle(deck).transform;
+      const b=(base&&base!=='none')?base:'';
+      deck.animate(
+        [{transform:`${b} scale(1)`},{transform:`${b} scale(1.03)`},{transform:`${b} scale(1)`}],
+        {duration:600,easing:'ease-in-out'});}},700);
+  },350+cards.length*140);
+}
+window.addEventListener('load',runHero);
+</script>
+</body>
+</html>
